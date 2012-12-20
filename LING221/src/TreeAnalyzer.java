@@ -147,7 +147,7 @@ public class TreeAnalyzer {
 				{
 					newsuffix.point = newsuffix.point-1;
 				}
-				
+				newsuffix.words.add(s);
 			}
 		}
 		deleteNegative(list);
@@ -189,7 +189,7 @@ public class TreeAnalyzer {
 				{
 					newprefix.point = newprefix.point-1;
 				}
-				
+				newprefix.words.add(s);
 			}
 		}
 		deleteNegative(list);

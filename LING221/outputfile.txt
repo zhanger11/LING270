@@ -3,5 +3,5 @@ _________________
 
 SUFFIX
 _________________
-ion:18
-ed:19
+ion:18 (reaction,creation,)
+ed:19 (reacted,)

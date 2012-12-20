@@ -102,7 +102,12 @@ public class Reader {
 			for (Morpheme m: prefix)
 			{
 				out.print(new StringBuffer(m.morpheme).reverse().toString() + ":");
-				out.println(m.point);
+				out.print(m.point+" (");
+				for (String s: m.words)
+				{
+					out.print(s+",");
+				}
+				out.println(")");
 			}
 			out.println();
 			out.println("SUFFIX");
@@ -110,7 +115,12 @@ public class Reader {
 			for (Morpheme m: suffix)
 			{
 				out.print(m.morpheme + ":");
-				out.println(m.point);
+				out.print(m.point+" (");
+				for (String s: m.words)
+				{
+					out.print(s+",");
+				}
+				out.println(")");
 			}
 
 			out.close();
