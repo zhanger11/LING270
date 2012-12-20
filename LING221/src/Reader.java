@@ -3,7 +3,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 
 public class Reader {
-	static String filename = "prefix.txt";
+	static String filename;
 	static LinkedList<String> words = new LinkedList<String>();
 	static LinkedList<String> forwardList = new LinkedList<String>();
 	static LinkedList<String> backwardList = new LinkedList<String>();
@@ -69,6 +69,7 @@ public class Reader {
 	
 	public static void main(String[] args)
 	{
+		filename = args[0];
 		TreeAnalyzer t = new TreeAnalyzer(forward,backward);
 		readFile();
 		//forward.treeTravel();
