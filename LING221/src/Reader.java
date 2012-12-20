@@ -3,7 +3,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 
 public class Reader {
-	static String filename = "data.txt";
+	static String filename = "prefix.txt";
 	static LinkedList<String> words = new LinkedList<String>();
 	static LinkedList<String> forwardList = new LinkedList<String>();
 	static LinkedList<String> backwardList = new LinkedList<String>();
@@ -25,8 +25,9 @@ public class Reader {
 			{
 				words.add(line);
 				forwardList.add(line);
-				backwardList.add(line);
+				//backwardList.add(line);
 				parseStatistics(line);
+				backwardList.add(new StringBuffer(line).reverse().toString());
 			}
 			
 			
@@ -71,11 +72,17 @@ public class Reader {
 		TreeAnalyzer t = new TreeAnalyzer(forward,backward);
 		readFile();
 		//forward.treeTravel();
-		LinkedList<Morpheme> list = t.suffix(forwardList);
+		
+	/*	for (Node n: backward.children)
+		{
+			System.out.println(n.character);
+		}*/
+		LinkedList<Morpheme> list = t.prefix(backwardList);
 		
 		for (Morpheme m: list)
 		{
-			System.out.println(m.morpheme);
+			System.out.print(new StringBuffer(m.morpheme).reverse().toString() + ":");
+			//System.out.println(m.morpheme + ":");
 			System.out.println(m.point);
 		}
 		

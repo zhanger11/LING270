@@ -15,13 +15,15 @@ public class TreeAnalyzer {
 	 */
 	public Morpheme findMorpheme(LinkedList<Morpheme> list, String s)
 	{
+		//System.out.println("HERE:"+s);
 		Morpheme returnM = null;
 		for (Morpheme m: list)
 		{
 			if (m.morpheme.equals(s))
 			{
+				//System.out.println("here BOOBIES");
 				returnM = m;
-				break;
+				return returnM;
 			}
 		}
 		returnM = new Morpheme(s);
@@ -34,6 +36,7 @@ public class TreeAnalyzer {
 	 */
 	public boolean wordExist(TreeRoot root, String word)
 	{
+		//System.out.println(word);
 		Node n = null;
 		for (int i = 0; i < word.length();i++)
 		{
@@ -46,6 +49,7 @@ public class TreeAnalyzer {
 				n = n.getChild(word.charAt(i));
 			}
 		}
+		//System.out.println(n.word);
 		return n.word;
 	}
 	/*
@@ -135,19 +139,44 @@ public class TreeAnalyzer {
 	}
 	
 	/*
-	 * return a list of possible morphenes as prefix (use backward tree)
+	 * return a list of possible morphemes as prefix (use backward tree)
 	 */
 	public LinkedList<Morpheme> prefix(LinkedList<String> inputs)
 	{
+		boolean valid;
+		Morpheme newprefix;
 		LinkedList<Morpheme> list = new LinkedList<Morpheme>();
-		for (String s: inputs)
+		for (String s: inputs) //for all the strings read in
 		{
 			int length = s.length();
-			for (int i = length-1; i>=0;i--)
+			for (int i = length-1; i>=2;i--) //continuously increase size of possible "prefix" to test
 			{
-				String suffix = s.substring(i, length);
+				valid = false;
+				String prefix = s.substring(i, length);
+				String rest = s.substring(0,i);
+				newprefix = findMorpheme(list,prefix);
+				if (wordExist(br,rest)) //if condition 1 satisfied
+				{
+					if (aroundOne(br,rest)) //if condition 2 satisfied
+					{
+						if (lessThanOne(br,rest,prefix.charAt(0))) //if condition 3 satisfied
+						{
+							valid = true;
+						}
+					}
+				}
+				if (valid) //if this "prefix" meets all requirements
+				{
+					newprefix.point = newprefix.point+19;
+				}
+				else //if not
+				{
+					newprefix.point = newprefix.point-1;
+				}
+				
 			}
 		}
-		return null;
+		
+		return list;
 	}
 }
