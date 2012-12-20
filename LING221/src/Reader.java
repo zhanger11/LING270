@@ -5,6 +5,8 @@ import java.io.FileReader;
 public class Reader {
 	static String filename = "data.txt";
 	static LinkedList<String> words = new LinkedList<String>();
+	static LinkedList<String> forwardList = new LinkedList<String>();
+	static LinkedList<String> backwardList = new LinkedList<String>();
 	static TreeRoot forward = new TreeRoot();
 	static TreeRoot backward = new TreeRoot();	
 	//reader
@@ -22,6 +24,8 @@ public class Reader {
 			while((line = br.readLine())!=null)
 			{
 				words.add(line);
+				forwardList.add(line);
+				backwardList.add(line);
 				parseStatistics(line);
 			}
 			
@@ -59,11 +63,8 @@ public class Reader {
 	public static void main(String[] args)
 	{
 		readFile();
-		backward.treeTravel();
-		/*for (Node n: forward.children)
-		{
-			System.out.println(n.getChar() + ":"+ n.getCount());
-		}*/
+		forward.treeTravel();
+		
 	}
 	
 }
