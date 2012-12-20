@@ -1,5 +1,7 @@
 import java.util.*;
 public class TreeAnalyzer {
+	static double closeToOne = 0.90;
+	
 	TreeRoot fr;
 	TreeRoot br;
 	public TreeAnalyzer(TreeRoot forward, TreeRoot backward)
@@ -9,12 +11,127 @@ public class TreeAnalyzer {
 	}
 	
 	/*
+	 * return found Morpheme, if not creates a new one, adds to list, then returns it
+	 */
+	public Morpheme findMorpheme(LinkedList<Morpheme> list, String s)
+	{
+		Morpheme returnM = null;
+		for (Morpheme m: list)
+		{
+			if (m.morpheme.equals(s))
+			{
+				returnM = m;
+				break;
+			}
+		}
+		returnM = new Morpheme(s);
+		list.add(returnM);
+		return returnM;
+	}
+	
+	/*
+	 * condition #1
+	 */
+	public boolean wordExist(TreeRoot root, String word)
+	{
+		Node n = null;
+		for (int i = 0; i < word.length();i++)
+		{
+			if (n==null)
+			{
+				n = root.getChild(word.charAt(i));
+			}
+			else
+			{
+				n = n.getChild(word.charAt(i));
+			}
+		}
+		return n.word;
+	}
+	/*
+	 * condition #2
+	 */
+	public boolean aroundOne(TreeRoot root, String word)
+	{
+		Node n = null;
+		for (int i = 0; i < word.length()-1;i++)
+		{
+			if (n==null)
+			{
+				n = root.getChild(word.charAt(i));
+			}
+			else
+			{
+				n = n.getChild(word.charAt(i));
+			}
+		}
+		if (((double)n.getChild(word.charAt(word.length()-1)).getCount())/((double)n.getCount()) > closeToOne) //if > threshold
+				return true;
+		return false;
+	}
+	
+	/*
+	 * condition #3
+	 */
+	public boolean lessThanOne(TreeRoot root, String word, char c)
+	{
+		Node n = null;
+		for (int i = 0; i < word.length();i++)
+		{
+			if (n==null)
+			{
+				n = root.getChild(word.charAt(i));
+			}
+			else
+			{
+				n = n.getChild(word.charAt(i));
+			}
+		}
+		if (((double)n.getChild(c).getCount())/((double)n.getCount()) < 1.0) 
+				return true;
+		return false;
+	}
+	
+	/*
 	 * return a list of possible morphemes as suffix (use forward tree)
 	 */
 	public LinkedList<Morpheme> suffix(LinkedList<String> inputs)
 	{
+		boolean valid;
+		Morpheme newsuffix;
 		LinkedList<Morpheme> list = new LinkedList<Morpheme>();
-		return null;
+		for (String s: inputs) //for all the strings read in
+		{
+			int length = s.length();
+			for (int i = length-1; i>=2;i--) //continuously increase size of possible "suffix" to test
+			{
+				valid = false;
+				String suffix = s.substring(i, length);
+				String rest = s.substring(0,i);
+				newsuffix = findMorpheme(list,suffix);
+				if (wordExist(fr,rest)) //if condition 1 satisfied
+				{
+					if (aroundOne(fr,rest)) //if condition 2 satisfied
+					{
+						if (lessThanOne(fr,rest,suffix.charAt(0))) //if condition 3 satisfied
+						{
+							valid = true;
+						}
+					}
+				}
+				if (valid) //if this "suffix" meets all requirements
+				{
+					newsuffix.point = newsuffix.point+19;
+				}
+				else //if not
+				{
+					newsuffix.point = newsuffix.point-1;
+				}
+				
+			}
+		}
+		
+		return list;
 	}
 	
 	/*
@@ -23,6 +140,14 @@ public class TreeAnalyzer {
 	public LinkedList<Morpheme> prefix(LinkedList<String> inputs)
 	{
 		LinkedList<Morpheme> list = new LinkedList<Morpheme>();
+		for (String s: inputs)
+		{
+			int length = s.length();
+			for (int i = length-1; i>=0;i--)
+			{
+				String suffix = s.substring(i, length);
+			}
+		}
 		return null;
 	}
 }

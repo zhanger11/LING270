@@ -4,12 +4,19 @@ public class Node {
 	LinkedList<Node> children;
 	char character;
 	int count;
+	boolean word; 
 	
 	public Node (char c)
 	{
 		character = c;
 		children = new LinkedList<Node>();
 		count = 1;
+		word = false;
+	}
+	
+	public void isWord()
+	{
+		word = true;
 	}
 	
 	public void incrementCount()

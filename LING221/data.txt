@@ -1,5 +1,3 @@
-hello
-there
-laptop
-hoola
-hoolae
+react
+reaction
+reacted

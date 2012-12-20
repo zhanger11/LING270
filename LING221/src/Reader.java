@@ -57,13 +57,28 @@ public class Reader {
 					currentF = currentF.addChild(s.charAt(i));
 					currentB = currentB.addChild(s.charAt(s.length()-1-i));
 				}
+				
+				if (i==length-1)
+				{
+					currentF.isWord();
+					currentB.isWord();
+				}
 		}
 	}
 	
 	public static void main(String[] args)
 	{
+		TreeAnalyzer t = new TreeAnalyzer(forward,backward);
 		readFile();
-		forward.treeTravel();
+		//forward.treeTravel();
+		LinkedList<Morpheme> list = t.suffix(forwardList);
+		
+		for (Morpheme m: list)
+		{
+			System.out.println(m.morpheme);
+			System.out.println(m.point);
+		}
+		
 		
 	}
 	
