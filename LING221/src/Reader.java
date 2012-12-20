@@ -105,7 +105,7 @@ public class Reader {
 				out.print(m.point+" (");
 				for (String s: m.words)
 				{
-					out.print(s+",");
+					out.print(new StringBuffer(s).reverse().toString()+",");
 				}
 				out.println(")");
 			}

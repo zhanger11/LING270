@@ -1,5 +1,8 @@
 PREFIX
 _________________
+out:19 (output,)
+good:19 (goodput,)
+through:19 (throughput,)
 
 SUFFIX
 _________________
