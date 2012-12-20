@@ -97,6 +97,22 @@ public class TreeAnalyzer {
 	}
 	
 	/*
+	 * helper method that gets rid of morphemes with negative scores
+	 */
+	public void deleteNegative(LinkedList<Morpheme> list)
+	{
+		for (Morpheme  m: list)
+		{
+			if (m.point<0){ 
+				list.remove(m);
+				deleteNegative(list); //prevent concurrent modification of list being iterated through
+				return;
+			}
+		}
+	}
+	
+	
+	/*
 	 * return a list of possible morphemes as suffix (use forward tree)
 	 */
 	public LinkedList<Morpheme> suffix(LinkedList<String> inputs)
@@ -134,7 +150,7 @@ public class TreeAnalyzer {
 				
 			}
 		}
-		
+		deleteNegative(list);
 		return list;
 	}
 	
@@ -176,7 +192,7 @@ public class TreeAnalyzer {
 				
 			}
 		}
-		
+		deleteNegative(list);
 		return list;
 	}
 }

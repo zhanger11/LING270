@@ -1,6 +1,8 @@
 import java.util.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 public class Reader {
 	static String filename;
@@ -8,9 +10,23 @@ public class Reader {
 	static LinkedList<String> forwardList = new LinkedList<String>();
 	static LinkedList<String> backwardList = new LinkedList<String>();
 	static TreeRoot forward = new TreeRoot();
-	static TreeRoot backward = new TreeRoot();	
+	static TreeRoot backward = new TreeRoot();
+	static LinkedList<Morpheme> prefix;
+	static LinkedList<Morpheme> suffix;
 	//reader
 	static BufferedReader br;
+	
+	public static boolean uniqueWord(String s)
+	{
+		for (String word: words)
+		{
+			if (word.equals((s))) 
+			{
+				return false;
+			}
+		}
+		return true;
+	}
 	
 	/*
 	 * reads basic reading the file and creating a linkedlist out of all of the words, and parse them for frequency statistics
@@ -23,11 +39,14 @@ public class Reader {
 			//for each word read
 			while((line = br.readLine())!=null)
 			{
-				words.add(line);
-				forwardList.add(line);
-				//backwardList.add(line);
-				parseStatistics(line);
-				backwardList.add(new StringBuffer(line).reverse().toString());
+				if (uniqueWord(line))
+				{
+					words.add(line);
+					forwardList.add(line);
+					//backwardList.add(line);
+					parseStatistics(line);
+					backwardList.add(new StringBuffer(line).reverse().toString());
+				}
 			}
 			
 			
@@ -72,21 +91,35 @@ public class Reader {
 		filename = args[0];
 		TreeAnalyzer t = new TreeAnalyzer(forward,backward);
 		readFile();
-		//forward.treeTravel();
+		prefix = t.prefix(backwardList);
+		suffix = t.suffix(forwardList);
 		
-	/*	for (Node n: backward.children)
-		{
-			System.out.println(n.character);
-		}*/
-		LinkedList<Morpheme> list = t.prefix(backwardList);
-		
-		for (Morpheme m: list)
-		{
-			System.out.print(new StringBuffer(m.morpheme).reverse().toString() + ":");
-			//System.out.println(m.morpheme + ":");
-			System.out.println(m.point);
-		}
-		
+		try { //output to file
+			PrintWriter out = new PrintWriter(new FileWriter("outputfile.txt"));
+			out.println("PREFIX");
+			out.println("_________________");
+			//print out prefix
+			for (Morpheme m: prefix)
+			{
+				out.print(new StringBuffer(m.morpheme).reverse().toString() + ":");
+				out.println(m.point);
+			}
+			out.println();
+			out.println("SUFFIX");
+			out.println("_________________");
+			for (Morpheme m: suffix)
+			{
+				out.print(m.morpheme + ":");
+				out.println(m.point);
+			}
+
+			out.close();
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+
 		
 	}
 	
