@@ -1,6 +1,6 @@
 import java.util.*;
 public class TreeAnalyzer {
-	static double closeToOne = 0.90;
+	static double closeToOne = 0.95;
 	
 	TreeRoot fr;
 	TreeRoot br;
@@ -103,7 +103,7 @@ public class TreeAnalyzer {
 	{
 		for (Morpheme  m: list)
 		{
-			if (m.point<0){ 
+			if (m.point<9){ 
 				list.remove(m);
 				deleteNegative(list); //prevent concurrent modification of list being iterated through
 				return;

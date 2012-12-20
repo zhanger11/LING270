@@ -86,6 +86,41 @@ public class Reader {
 		}
 	}
 	
+	private static void printList(LinkedList<Morpheme> list, String label, PrintWriter out, boolean reverse)
+	{
+		out.println(label);
+		out.println("_________________");
+		//print out prefix
+		if (reverse)
+		{
+			for (Morpheme m: list)
+			{
+				out.print(new StringBuffer(m.morpheme).reverse().toString() + ":");
+				out.print(m.point+" (");
+				for (String s: m.words)
+				{
+					out.print(new StringBuffer(s).reverse().toString()+",");
+				}
+				out.println(")");
+			}
+		}
+		else
+		{
+			for (Morpheme m: list)
+			{
+				out.print(m.morpheme + ":");
+				out.print(m.point+" (");
+				for (String s: m.words)
+				{
+					out.print(s+",");
+				}
+				out.println(")");
+			}
+		}
+		
+		out.println();
+	}
+	
 	public static void main(String[] args)
 	{
 		filename = args[0];
@@ -96,33 +131,8 @@ public class Reader {
 		
 		try { //output to file
 			PrintWriter out = new PrintWriter(new FileWriter("outputfile.txt"));
-			out.println("PREFIX");
-			out.println("_________________");
-			//print out prefix
-			for (Morpheme m: prefix)
-			{
-				out.print(new StringBuffer(m.morpheme).reverse().toString() + ":");
-				out.print(m.point+" (");
-				for (String s: m.words)
-				{
-					out.print(new StringBuffer(s).reverse().toString()+",");
-				}
-				out.println(")");
-			}
-			out.println();
-			out.println("SUFFIX");
-			out.println("_________________");
-			for (Morpheme m: suffix)
-			{
-				out.print(m.morpheme + ":");
-				out.print(m.point+" (");
-				for (String s: m.words)
-				{
-					out.print(s+",");
-				}
-				out.println(")");
-			}
-
+			printList(prefix,"PREFIX",out,true);
+			printList(suffix,"SUFFIX",out,false);
 			out.close();
 			
 		} catch (Exception e) {
