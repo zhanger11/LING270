@@ -9,4 +9,13 @@ public class Morpheme {
 		point = 0;
 		words = new LinkedList<String>();
 	}
+	
+	public boolean contains (String s)
+	{
+		for (String word: words)
+		{
+			if (word.equals(s)) return true;
+		}
+		return false;
+	}
 }

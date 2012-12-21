@@ -48,6 +48,21 @@ public class TreeAnalyzer {
 			{
 				n = n.getChild(word.charAt(i));
 			}
+			
+			/*if (i==word.length()-1 && n.word==true) //extra condition of if stem-last letter is a word
+			{
+				return true;
+			}*/
+			
+			
+		}
+		if (n.word==false) //if stem + e is a word, then pass condition 1
+		{
+			if (n.getChild('e')!=null)
+			{
+				//System.out.println("e test:" + word);
+				return n.getChild('e').word;
+			}
 		}
 		//System.out.println(n.word);
 		return n.word;
@@ -98,16 +113,18 @@ public class TreeAnalyzer {
 	
 	/*
 	 * helper method that gets rid of morphemes with negative scores
+	 * also delete morpheme "e" since that is an unwanted suffix from the rule stem+e is rule, since this incorrectly adds "e" as suffix
 	 */
 	public void deleteNegative(LinkedList<Morpheme> list)
 	{
 		for (Morpheme  m: list)
 		{
-			if (m.point<9){ 
+			if (m.point<9 || m.morpheme.equals("e")){ 
 				list.remove(m);
 				deleteNegative(list); //prevent concurrent modification of list being iterated through
 				return;
 			}
+			
 		}
 	}
 	
@@ -118,6 +135,7 @@ public class TreeAnalyzer {
 	public LinkedList<Morpheme> suffix(LinkedList<String> inputs)
 	{
 		boolean valid;
+		boolean removeFirstSuffix;
 		Morpheme newsuffix;
 		LinkedList<Morpheme> list = new LinkedList<Morpheme>();
 		for (String s: inputs) //for all the strings read in
@@ -125,10 +143,21 @@ public class TreeAnalyzer {
 			int length = s.length();
 			for (int i = length-1; i>=2;i--) //continuously increase size of possible "suffix" to test
 			{
+				removeFirstSuffix = false;
 				valid = false;
 				String suffix = s.substring(i, length);
 				String rest = s.substring(0,i);
-				newsuffix = findMorpheme(list,suffix);
+				
+				if (suffix.charAt(0)==s.charAt(i-1)) //hop + ping, "ing" here is the suffix
+				{
+					//System.out.println(rest + suffix);
+					removeFirstSuffix = true;
+					//suffix = suffix.substring(1, suffix.length());
+				}
+				if (removeFirstSuffix) newsuffix = findMorpheme(list,suffix.substring(1, suffix.length())); //remove letter
+				else newsuffix = findMorpheme(list,suffix);
+				
+				
 				if (wordExist(fr,rest)) //if condition 1 satisfied
 				{
 					if (aroundOne(fr,rest)) //if condition 2 satisfied
@@ -141,13 +170,17 @@ public class TreeAnalyzer {
 				}
 				if (valid) //if this "suffix" meets all requirements
 				{
+					//System.out.println(suffix + ":" + rest);
 					newsuffix.point = newsuffix.point+19;
 				}
 				else //if not
 				{
 					newsuffix.point = newsuffix.point-1;
 				}
-				newsuffix.words.add(s);
+				
+				if (!newsuffix.contains(s)) newsuffix.words.add(s); 
+				else continue;
+				
 			}
 		}
 		deleteNegative(list);
@@ -189,7 +222,9 @@ public class TreeAnalyzer {
 				{
 					newprefix.point = newprefix.point-1;
 				}
-				newprefix.words.add(s);
+				//newprefix.words.add(s);
+				if (!newprefix.contains(s)) newprefix.words.add(s); 
+				else continue;
 			}
 		}
 		deleteNegative(list);
