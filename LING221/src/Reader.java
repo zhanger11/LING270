@@ -221,9 +221,9 @@ public class Reader {
 			out.println();
 			printList(suffix,"SUFFIX",out,false);
 			out.print("PRECISION: ");
-			out.println((double)((double)unionS/(double)totalSize(prefix)));
+			out.println((double)((double)unionS/(double)totalSize(suffix)));
 			out.print("RECALL: ");
-			out.println((double)((double)unionS/(double)totalSize(actualPrefix)));
+			out.println((double)((double)unionS/(double)totalSize(actualSuffix)));
 			
 			out.close();
 			

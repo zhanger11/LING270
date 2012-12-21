@@ -12,5 +12,5 @@ ing:35 (playing,bowling,gaming,pregaming,string,)
 er:55 (player,roller,gamer,pregamer,)
 ers:17 (gamers,presumers,pregamers,)
 es:18 (games,pregames,)
-PRECISION: 0.8
-RECALL: 4.0
+PRECISION: 0.5714285714285714
+RECALL: 0.5714285714285714
