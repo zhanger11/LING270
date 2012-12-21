@@ -232,6 +232,10 @@ public class TreeAnalyzer {
 		pruning(list);
 		return list;
 	}
+	
+	/*
+	 * helper pruning method
+	 */
 	private boolean pruned(LinkedList<Morpheme> list, Morpheme composite)
 	{
 		int pruned = 0;

@@ -13,6 +13,10 @@ public class Reader {
 	static TreeRoot backward = new TreeRoot();
 	static LinkedList<Morpheme> prefix;
 	static LinkedList<Morpheme> suffix;
+	
+	static LinkedList<Morpheme> actualPrefix = new LinkedList<Morpheme>();
+	static LinkedList<Morpheme> actualSuffix = new LinkedList<Morpheme>();
+	
 	//reader
 	static BufferedReader br;
 	
@@ -33,20 +37,53 @@ public class Reader {
 	 */
 	public static void readFile()
 	{
+		int state = 0; //0= expecting prefix or suffix morpheme symbol (+/-), 1 = reading in actual morpheme, 2 = reading in words
+		int list = 0; //0 = prefix, 1 = suffix, 2 = no morpheme
+		Morpheme m = null;
 		try {
 			br = new BufferedReader(new FileReader(filename));
 			String line;
 			//for each word read
 			while((line = br.readLine())!=null)
 			{
-				if (uniqueWord(line))
+				
+				if (state==1) //add morpheme answer to proper list, and fix which list to add answer to 
 				{
-					words.add(line);
-					forwardList.add(line);
-					//backwardList.add(line);
-					parseStatistics(line);
-					backwardList.add(new StringBuffer(line).reverse().toString());
+					if (list == 0) actualPrefix.add(m =new Morpheme(new StringBuffer(line).reverse().toString()));
+					else if (list==1) actualSuffix.add(m =new Morpheme(line));
+					state = 2;
 				}
+				
+				else if (state==2)
+				{
+					if (line.equals("+") ||line.equals("_")||line.equals("-")) //new morpheme
+					{
+						state = 0;
+					}
+					else //normal inputs
+					{
+						//if (list!=2) m.words.add(line); //adding word to answer key morpheme
+						if (list==0) m.words.add(new StringBuffer(line).reverse().toString());
+						else if (list==1) m.words.add(line);	
+						if (uniqueWord(line)) //normal adding of words
+						{
+							words.add(line);
+							forwardList.add(line);
+							//backwardList.add(line);
+							parseStatistics(line);
+							backwardList.add(new StringBuffer(line).reverse().toString());
+						}
+					}
+				}
+				if (state==0) //prefix or suffix?
+				{
+					if (line.equals("+")) list = 0;
+					else if (line.equals("-")) list = 1;
+					else list = 2;
+					
+					state = 1;
+				}
+				
 			}
 			
 			
@@ -86,6 +123,47 @@ public class Reader {
 		}
 	}
 	
+	private static Morpheme contains (LinkedList<Morpheme> list, String s)
+	{
+		Morpheme m = null;
+		for (Morpheme morpheme: list)
+		{
+			if (morpheme.morpheme.equals(s)) 
+			{
+				m = morpheme;
+				break;
+			}
+		}
+		return m;
+	}
+	
+	private static int union (LinkedList<Morpheme> answer, LinkedList<Morpheme> derived)
+	{
+		int similar = 0;
+		Morpheme found=null;
+		for (Morpheme a: answer)
+		{
+			if ((found=contains(derived,a.morpheme))!=null)
+			{
+				for (String s: a.words)
+				{
+					if (found.contains(s)) similar++;
+				}
+			}
+		}
+		return similar;
+	}
+	
+	private static int totalSize(LinkedList<Morpheme> list)
+	{
+		int size = 0;
+		for (Morpheme m: list)
+		{
+			size = size + m.words.size();
+		}
+		return size;
+	}
+	
 	private static void printList(LinkedList<Morpheme> list, String label, PrintWriter out, boolean reverse)
 	{
 		out.println(label);
@@ -118,7 +196,7 @@ public class Reader {
 			}
 		}
 		
-		out.println();
+		//out.println();
 	}
 	
 	public static void main(String[] args)
@@ -128,11 +206,25 @@ public class Reader {
 		readFile();
 		prefix = t.prefix(backwardList);
 		suffix = t.suffix(forwardList);
-		
+		int unionP = union(actualPrefix,prefix); 
+		int unionS = union(actualSuffix,suffix);
 		try { //output to file
 			PrintWriter out = new PrintWriter(new FileWriter("outputfile.txt"));
+			
 			printList(prefix,"PREFIX",out,true);
+			out.print("PRECISION: ");
+			out.println((double)((double)unionP/(double)totalSize(prefix)));
+			out.print("RECALL: ");
+			out.println((double)((double)unionP/(double)totalSize(actualPrefix)));
+			
+			
+			out.println();
 			printList(suffix,"SUFFIX",out,false);
+			out.print("PRECISION: ");
+			out.println((double)((double)unionS/(double)totalSize(prefix)));
+			out.print("RECALL: ");
+			out.println((double)((double)unionS/(double)totalSize(actualPrefix)));
+			
 			out.close();
 			
 		} catch (Exception e) {

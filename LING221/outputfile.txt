@@ -1,14 +1,16 @@
 PREFIX
 _________________
-out:19 (output,)
-good:19 (goodput,)
-through:19 (throughput,)
+pre:75 (pregaming,pregamer,presumers,pregames,pregamers,)
+ad:18 (adjust,adjunct,)
+st:17 (stroll,step,string,)
+PRECISION: 0.2
+RECALL: 1.0
 
 SUFFIX
 _________________
-ion:18 (reaction,creation,)
-ed:19 (reacted,)
-ing:37 (taking,hopping,)
-s:38 (plays,players,)
-er:19 (player,)
-
+ing:35 (playing,bowling,gaming,pregaming,string,)
+er:55 (player,roller,gamer,pregamer,)
+ers:17 (gamers,presumers,pregamers,)
+es:18 (games,pregames,)
+PRECISION: 0.8
+RECALL: 4.0
