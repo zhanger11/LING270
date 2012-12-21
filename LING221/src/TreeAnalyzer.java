@@ -56,14 +56,14 @@ public class TreeAnalyzer {
 			
 			
 		}
-		if (n.word==false) //if stem + e is a word, then pass condition 1
+		/*if (n.word==false) //if stem + e is a word, then pass condition 1
 		{
 			if (n.getChild('e')!=null)
 			{
 				//System.out.println("e test:" + word);
 				return n.getChild('e').word;
 			}
-		}
+		}*/
 		//System.out.println(n.word);
 		return n.word;
 	}
@@ -119,7 +119,9 @@ public class TreeAnalyzer {
 	{
 		for (Morpheme  m: list)
 		{
-			if (m.point<9 || m.morpheme.equals("e")){ 
+			//System.out.println(m.morpheme);
+			if (m.point<0 || m.morpheme.equals("e")){ 
+				//if (m.morpheme.equals(("s")))System.out.println("SSS");
 				list.remove(m);
 				deleteNegative(list); //prevent concurrent modification of list being iterated through
 				return;
@@ -147,7 +149,7 @@ public class TreeAnalyzer {
 				valid = false;
 				String suffix = s.substring(i, length);
 				String rest = s.substring(0,i);
-				
+				//if (suffix.equals(("s")))System.out.println("S");
 				if (suffix.charAt(0)==s.charAt(i-1)) //hop + ping, "ing" here is the suffix
 				{
 					//System.out.println(rest + suffix);
@@ -157,9 +159,10 @@ public class TreeAnalyzer {
 				if (removeFirstSuffix) newsuffix = findMorpheme(list,suffix.substring(1, suffix.length())); //remove letter
 				else newsuffix = findMorpheme(list,suffix);
 				
-				
+				//if (suffix.equals(("s")))System.out.println(wordExist(fr,rest) + " "+ rest);
 				if (wordExist(fr,rest)) //if condition 1 satisfied
 				{
+				//	if (suffix.equals(("s")))System.out.println(aroundOne(fr,rest) + " "+ rest);
 					if (aroundOne(fr,rest)) //if condition 2 satisfied
 					{
 						if (lessThanOne(fr,rest,suffix.charAt(0))) //if condition 3 satisfied
@@ -259,6 +262,7 @@ public class TreeAnalyzer {
 	{
 		for (Morpheme m: list)
 		{
+			//System.out.println(m.morpheme);
 			if (pruned(list,m))
 			{	
 				System.out.println("pruned");

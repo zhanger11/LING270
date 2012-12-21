@@ -32,3 +32,7 @@ string
 ring
 just
 game
+gamer
+pregame
+pregamer
+presumer

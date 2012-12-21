@@ -1,16 +1,27 @@
 PREFIX
 _________________
-pre:75 (pregaming,pregamer,presumers,pregames,pregamers,)
-ad:18 (adjust,adjunct,)
-st:17 (stroll,step,string,)
-PRECISION: 0.2
+pre:93
+RETRIVED: pregaming,pregamer,presumers,pregames,pregamers,pregame,presumer,
+RELEVANT: 
+ad:18
+RETRIVED: adjust,adjunct,
+RELEVANT: adjust,adjunct,
+st:17
+RETRIVED: stroll,step,string,
+RELEVANT: 
+PRECISION: 0.16666666666666666
 RECALL: 1.0
 
 SUFFIX
 _________________
-ing:35 (playing,bowling,gaming,pregaming,string,)
-er:55 (player,roller,gamer,pregamer,)
-ers:17 (gamers,presumers,pregamers,)
-es:18 (games,pregames,)
-PRECISION: 0.5714285714285714
-RECALL: 0.5714285714285714
+ing:15
+RETRIVED: playing,bowling,gaming,pregaming,string,
+RELEVANT: playing,bowling,gaming,pregaming,
+er:34
+RETRIVED: player,roller,gamer,pregamer,presumer,
+RELEVANT: player,roller,gamer,gamers,pregamer,presumers,
+s:15
+RETRIVED: gamers,presumers,games,pregames,pregamers,
+RELEVANT: games,gamers,pregames,pregamers,
+PRECISION: 0.8
+RECALL: 0.8571428571428571

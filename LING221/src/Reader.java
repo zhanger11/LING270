@@ -164,7 +164,7 @@ public class Reader {
 		return size;
 	}
 	
-	private static void printList(LinkedList<Morpheme> list, String label, PrintWriter out, boolean reverse)
+	private static void printList(LinkedList<Morpheme> list, String label, PrintWriter out, boolean reverse, LinkedList<Morpheme> answer)
 	{
 		out.println(label);
 		out.println("_________________");
@@ -173,26 +173,56 @@ public class Reader {
 		{
 			for (Morpheme m: list)
 			{
+				Morpheme a = contains(answer,m.morpheme);
 				out.print(new StringBuffer(m.morpheme).reverse().toString() + ":");
+				out.println(m.point);
+				out.print("RETRIVED: ");
+				for (String s: m.words)
+				{
+					out.print(new StringBuffer(s).reverse().toString()+",");
+				}
+				out.println();
+				out.print("RELEVANT: ");
+				if (a!=null)
+				{
+					for (String s: a.words)
+					{
+						out.print(new StringBuffer(s).reverse().toString()+ ",");
+					}
+				}
+				out.println();
+				
+				/*out.print(new StringBuffer(m.morpheme).reverse().toString() + ":");
 				out.print(m.point+" (");
 				for (String s: m.words)
 				{
 					out.print(new StringBuffer(s).reverse().toString()+",");
 				}
-				out.println(")");
+				out.println(")");*/
 			}
 		}
 		else
 		{
 			for (Morpheme m: list)
 			{
+				Morpheme a = contains(answer,m.morpheme);
 				out.print(m.morpheme + ":");
-				out.print(m.point+" (");
+				out.println(m.point);
+				out.print("RETRIVED: ");
 				for (String s: m.words)
 				{
 					out.print(s+",");
 				}
-				out.println(")");
+				out.println();
+				out.print("RELEVANT: ");
+				if (a!=null)
+				{
+					for (String s: a.words)
+					{
+						out.print(s+ ",");
+					}
+				}
+				out.println();
 			}
 		}
 		
@@ -211,7 +241,7 @@ public class Reader {
 		try { //output to file
 			PrintWriter out = new PrintWriter(new FileWriter("outputfile.txt"));
 			
-			printList(prefix,"PREFIX",out,true);
+			printList(prefix,"PREFIX",out,true, actualPrefix);
 			out.print("PRECISION: ");
 			out.println((double)((double)unionP/(double)totalSize(prefix)));
 			out.print("RECALL: ");
@@ -219,7 +249,7 @@ public class Reader {
 			
 			
 			out.println();
-			printList(suffix,"SUFFIX",out,false);
+			printList(suffix,"SUFFIX",out,false, actualSuffix);
 			out.print("PRECISION: ");
 			out.println((double)((double)unionS/(double)totalSize(suffix)));
 			out.print("RECALL: ");
