@@ -11,3 +11,7 @@ take
 taking
 hop
 hopping
+play
+plays
+player
+players

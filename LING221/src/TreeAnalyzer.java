@@ -184,6 +184,7 @@ public class TreeAnalyzer {
 			}
 		}
 		deleteNegative(list);
+		pruning(list);
 		return list;
 	}
 	
@@ -228,6 +229,41 @@ public class TreeAnalyzer {
 			}
 		}
 		deleteNegative(list);
+		pruning(list);
 		return list;
+	}
+	private boolean pruned(LinkedList<Morpheme> list, Morpheme composite)
+	{
+		int pruned = 0;
+		String temp = new String(composite.morpheme);
+		for (Morpheme m: list)
+		{
+			if (temp.contains(m.morpheme) && m.point>=composite.point && !m.morpheme.equals(composite.morpheme))
+			{
+				temp.replace(m.morpheme, ""); //prune away a party
+				pruned++;
+			}
+		}
+		//System.out.println(pruned);
+		return pruned==2;
+	}
+	
+	/*
+	 * prune away some morphemes
+	 */
+	public void pruning(LinkedList<Morpheme> list)
+	{
+		for (Morpheme m: list)
+		{
+			if (pruned(list,m))
+			{	
+				System.out.println("pruned");
+				list.remove(m);
+				pruning(list);
+				return;
+			}
+		}
+		
+		return;
 	}
 }
