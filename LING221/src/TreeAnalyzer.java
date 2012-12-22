@@ -175,6 +175,7 @@ public class TreeAnalyzer {
 				{
 					//System.out.println(suffix + ":" + rest);
 					newsuffix.point = newsuffix.point+19;
+					newsuffix.retrievedWords.add(s);
 				}
 				else //if not
 				{
@@ -221,6 +222,7 @@ public class TreeAnalyzer {
 				if (valid) //if this "prefix" meets all requirements
 				{
 					newprefix.point = newprefix.point+19;
+					newprefix.retrievedWords.add(s);
 				}
 				else //if not
 				{
